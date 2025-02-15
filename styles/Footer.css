@@ -1,0 +1,28 @@
+/* components/Footer.css */
+.footer {
+    margin-top: auto; /* Push footer to the bottom */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background color */
+    text-align: center;
+    border-top: 1px solid #eaeaea; /* Top border for separation */
+}
+
+.footer-links {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #007bff; /* Link color */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.footer-links a:hover {
+    color: #0056b3; /* Darker shade on hover */
+}
+
+.footer-copy {
+    font-size: 14px;
+    color: #6c757d; /* Muted text color */
+} 

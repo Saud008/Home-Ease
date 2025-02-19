@@ -1,28 +1,42 @@
-/* components/Footer.css */
+/* styles/Footer.css */
 .footer {
-    margin-top: auto; /* Push footer to the bottom */
-    padding: 20px;
-    background-color: #f8f9fa; /* Light background color */
-    text-align: center;
-    border-top: 1px solid #eaeaea; /* Top border for separation */
+    display: flex; /* Use Flexbox for layout */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    padding: 20px; /* Adjust padding for a more compact footer */
+    background-color: #002244; /* Darker tone for footer */
+    color: white; /* Text color for footer */
 }
 
 .footer-links {
-    margin-bottom: 10px;
+    display: flex; /* Use Flexbox for links */
+    gap: 20px; /* Space between links */
+    margin-bottom: 10px; /* Space below links */
 }
 
 .footer-links a {
-    margin: 0 15px;
-    text-decoration: none;
-    color: #007bff; /* Link color */
+    color: #ff9800; /* Change link color to match the button color */
+    text-decoration: none; /* Remove underline */
     transition: color 0.3s; /* Smooth transition for hover effect */
 }
 
 .footer-links a:hover {
-    color: #0056b3; /* Darker shade on hover */
+    color: #e68a00; /* Darker shade on hover */
+}
+
+.social-icons {
+    display: flex; /* Use Flexbox for social icons */
+    gap: 15px; /* Space between icons */
+    margin-bottom: 10px; /* Space below icons */
+}
+
+.social-icons a {
+    color: white; /* Icon color */
+    font-size: 20px; /* Adjust icon size */
 }
 
 .footer-copy {
-    font-size: 14px;
-    color: #6c757d; /* Muted text color */
+    font-size: 14px; /* Font size for copyright text */
+    color: #ffffff; /* Muted text color for better contrast */
+    text-align: center; /* Center text in footer */
 } 

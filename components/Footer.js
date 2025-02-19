@@ -1,7 +1,7 @@
 "use client"; // Add this line to make it a client component
 
 import React from 'react';
-import '@/styles/Footer.css'; // Updated path to the CSS file
+import '../styles/Footer.css'; // Import the CSS file
 
 const Footer = () => {
     return (
@@ -12,7 +12,7 @@ const Footer = () => {
                 <a href="/refund">Refund Policy</a>
             </div>
             <div className="footer-copy">
-                &copy; {new Date().getFullYear()} Your Company Name. All rights reserved.
+                &copy; {new Date().getFullYear()} Home Ease. All rights reserved.
             </div>
         </footer>
     );

@@ -1,0 +1,58 @@
+/* components/Navbar.css */
+.navbar {
+    background-color: #003366; /* Dark blue color */
+    color: white; /* Text color */
+    display: flex;
+    justify-content: space-between; /* Space between logo and buttons */
+    align-items: center; /* Center items vertically */
+    width: 100%;
+    padding: 4px 20px; /* Add some padding */
+    /* border: 1px solid white; */
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-left img {
+    height: 60px; /* Adjust logo size */
+    /* border: 1px solid red; */
+}
+
+.site-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 600px; /* Adjust as needed */
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-right button {
+    padding: 10px 15px; /* Button padding */
+    border: none; /* Remove border */
+    background-color: #005eff; /* Blue color for buttons */
+    color: white; /* Button text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.navbar-right button:hover {
+    background-color: #e68a00; /* Darker shade on hover */
+}
+
+.user-name {
+    font-weight: bold;
+}

@@ -1,42 +1,23 @@
 "use client"; // Add this line to make it a client component
 
-import React, { useState, useEffect } from 'react';
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Content from "@/components/Content";
-import { auth } from './firebase'; // Import Firebase auth
-import { onAuthStateChanged } from "firebase/auth";
-
+import React, { useState } from 'react';
+import { Layout } from '@/components/Layout';
+import { Hero } from '@/components/Hero/Hero';
+import { Services } from '@/components/Services/Services';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userProfile, setUserProfile] = useState({});
+    const auth = useAuth();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setIsLoggedIn(true);
-                setUserProfile({ name: user.displayName });
-            } else {
-                setIsLoggedIn(false);
-                setUserProfile({});
-            }
-        });
-
-        return () => unsubscribe(); // Cleanup subscription on unmount
-    }, []);
+    const handleExploreClick = () => {
+        // Smooth scroll to services section
+        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
-        <div id="root">
-            <div className="navbar">
-                <Navbar isLoggedIn={isLoggedIn} userProfile={userProfile} setIsLoggedIn={setIsLoggedIn} />
-            </div>
-            <div className="content">
-                <Content />
-            </div>
-            <div className="footer">
-                <Footer />
-            </div>
-        </div>
+        <Layout>
+            <Hero onExploreClick={handleExploreClick} />
+            <Services />
+        </Layout>
     );
 }

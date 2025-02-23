@@ -4,8 +4,8 @@
     flex-direction: column; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
     padding: 20px; /* Adjust padding for a more compact footer */
-    background-color: #002244; /* Darker tone for footer */
-    color: white; /* Text color for footer */
+    background-color: var(--primary); /* Darker tone for footer */
+    color: var(--background); /* Text color for footer */
 }
 
 .footer-links {
@@ -15,13 +15,13 @@
 }
 
 .footer-links a {
-    color: #ff9800; /* Change link color to match the button color */
+    color: var(--background);
     text-decoration: none; /* Remove underline */
-    transition: color 0.3s; /* Smooth transition for hover effect */
+    transition: opacity 0.3s; /* Smooth transition for hover effect */
 }
 
 .footer-links a:hover {
-    color: #e68a00; /* Darker shade on hover */
+    opacity: 0.8;
 }
 
 .social-icons {
@@ -31,12 +31,12 @@
 }
 
 .social-icons a {
-    color: white; /* Icon color */
+    color: var(--background);
     font-size: 20px; /* Adjust icon size */
 }
 
 .footer-copy {
     font-size: 14px; /* Font size for copyright text */
-    color: #ffffff; /* Muted text color for better contrast */
+    color: var(--background);
     text-align: center; /* Center text in footer */
 } 

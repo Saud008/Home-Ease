@@ -2,19 +2,32 @@
     min-height: 80vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%);
-    padding: var(--spacing-xl) 0;
     position: relative;
     overflow: hidden;
+    padding: var(--spacing-xl) 0;
+    background-color: var(--background);
 }
 
-.hero::before {
-    content: '';
+.hero-background {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: url('/hero-pattern.svg') repeat;
-    opacity: 0.1;
+    background-image: url('/download.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    z-index: 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 0;
 }
 
@@ -22,12 +35,16 @@
     position: relative;
     z-index: 1;
     text-align: center;
+    background-color: transparent;
 }
 
 .hero h1 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     margin-bottom: var(--spacing-lg);
     line-height: 1.2;
+    color: var(--foreground);
+    position: relative;
+    z-index: 2;
 }
 
 .hero p {
@@ -37,17 +54,21 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-button {
     padding: 1rem 2rem;
     font-size: 1.1rem;
     background: var(--primary);
-    color: white;
+    color: var(--background);
     border: none;
     border-radius: var(--radius-md);
     transition: transform 0.2s, background 0.2s;
     box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 2;
 }
 
 .hero-button:hover {

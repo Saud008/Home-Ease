@@ -5,7 +5,7 @@ import './Services.css';
 
 const ServiceCard = ({ service }) => {
     const handleBooking = (serviceTitle) => {
-        console.log(`Booking ${serviceTitle}`);
+        window.location.href = `/services/${service._id}`;
     };
 
     return (

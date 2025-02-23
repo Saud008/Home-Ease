@@ -8,6 +8,7 @@ import './Navbar.css'; // Assuming you have some CSS for styling
 
 const Navbar = () => {
     const [loading, setLoading] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
     const { user } = useAuth();
 
     const handleLogin = async () => {
@@ -60,6 +61,15 @@ const Navbar = () => {
         }
     };
 
+    const toggleProfile = () => {
+        setShowProfile(!showProfile);
+    };
+
+    // Get first letter of email for fallback avatar
+    const getInitial = () => {
+        return user?.email ? user.email[0].toUpperCase() : 'U';
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-left">
@@ -76,13 +86,61 @@ const Navbar = () => {
                     <span>Loading...</span>
                 ) : user ? (
                     <>
-                        <span className="user-name">{user.name}</span>
-                        <button 
-                            onClick={handleLogout}
-                            className="auth-button logout-button"
-                        >
-                            Logout
-                        </button>
+                        <div className="user-profile">
+                            <div 
+                                className="profile-circle" 
+                                onClick={toggleProfile}
+                            >
+                                {user.photoURL ? (
+                                    <img 
+                                        src={user.photoURL} 
+                                        alt="profile"
+                                        className="profile-avatar"
+                                    />
+                                ) : (
+                                    <div className="profile-initial">
+                                        {getInitial()}
+                                    </div>
+                                )}
+                            </div>
+                            {showProfile && (
+                                <div className="profile-dropdown">
+                                    <div className="profile-header">
+                                        <div className="profile-info">
+                                            <div className="profile-avatar-large">
+                                                {user.photoURL ? (
+                                                    <img 
+                                                        src={user.photoURL} 
+                                                        alt="profile"
+                                                        className="profile-image"
+                                                    />
+                                                ) : (
+                                                    <div className="profile-initial-large">
+                                                        {getInitial()}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="profile-details">
+                                                <h2>{user.email}</h2>
+                                                <p>{user.email}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="profile-content">
+                                        <div className="profile-section">
+                                            <h3>Phone Number</h3>
+                                            <p>{user.phoneNumber || 'Not provided'}</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={handleLogout}
+                                        className="logout-button"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </>
                 ) : (
                     <button 

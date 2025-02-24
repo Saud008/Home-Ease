@@ -11,79 +11,32 @@ export async function POST(request) {
         
         const client = await pool.connect();
         try {
-            await client.query('BEGIN');
-
-            // Insert into bookings table
-            const bookingResult = await client.query(
+            // Create booking with pending status
+            const result = await client.query(
                 `INSERT INTO bookings (
-                    booking_id, 
                     user_id,
                     service_type,
                     status,
                     scheduled_time,
+                    base_price,
                     total_cost,
-                    payment_status,
-                    special_instructions,
-                    created_at
+                    payment_status
                 ) VALUES (
-                    uuid_generate_v4(),
-                    $1,
-                    $2,
-                    'NEW',
-                    $3,
-                    $4,
-                    'UNPAID',
-                    $5,
-                    CURRENT_TIMESTAMP
+                    $1, $2, 'pending', $3, $4, NULL, 'pending'
                 ) RETURNING booking_id`,
                 [
                     booking.user_id,
                     booking.service_type,
                     booking.scheduled_time,
-                    booking.total_cost,
-                    booking.special_instructions
+                    booking.base_price
                 ]
             );
 
-            const bookingId = bookingResult.rows[0].booking_id;
-
-            // Insert into payments table
-            await client.query(
-                `INSERT INTO payments (
-                    payment_id,
-                    booking_id,
-                    user_id,
-                    amount,
-                    payment_method,
-                    payment_status,
-                    created_at
-                ) VALUES (
-                    uuid_generate_v4(),
-                    $1,
-                    $2,
-                    $3,
-                    $4,
-                    'UNPAID',
-                    CURRENT_TIMESTAMP
-                )`,
-                [
-                    bookingId,
-                    booking.user_id,
-                    booking.total_cost,
-                    booking.payment_method
-                ]
-            );
-
-            await client.query('COMMIT');
-            
-            return NextResponse.json({ 
+            return NextResponse.json({
                 message: 'Booking created successfully',
-                bookingId 
+                bookingId: result.rows[0].booking_id
             });
 
-        } catch (error) {
-            await client.query('ROLLBACK');
-            throw error;
         } finally {
             client.release();
         }

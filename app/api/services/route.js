@@ -1,22 +1,30 @@
+import { connectDB } from '@/lib/mongodb';
+import Service from '@/models/Service';
 import { NextResponse } from 'next/server';
-import clientPromise from '@/utils/mongodb';
 
 export async function GET() {
     try {
-        const client = await clientPromise;
-        const db = client.db("homeease");
+        await connectDB();
         
-        const services = await db.collection("services")
-            .find({})
-            .toArray();
+        const services = await Service.find({ isActive: true }).lean();
+        
+        // Transform the data to match the component's expectations
+        const transformedServices = services.map(service => ({
+            ...service,
+            category: {
+                name: service.category,
+                icon: '🏠' // Default icon
+            },
+            type: {
+                name: service.type
+            }
+        }));
 
-        console.log('API Response:', services);
-
-        return NextResponse.json(services);
+        return NextResponse.json(transformedServices);
     } catch (error) {
-        console.error('Database Error:', error);
+        console.error('Error details:', error);
         return NextResponse.json(
-            { error: 'Failed to fetch services' },
+            { error: 'Failed to fetch services: ' + error.message },
             { status: 500 }
         );
     }

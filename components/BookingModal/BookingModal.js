@@ -5,20 +5,18 @@ import { AddressModal } from '../AddressModal/AddressModal';
 import toast from 'react-hot-toast';
 import './BookingModal.css';
 
-export function BookingModal({ service, onClose, onSubmit, userId }) {
+export function BookingModal({ service, onClose, userId }) {
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [bookingData, setBookingData] = useState({
         address_id: '',
         scheduled_time: '',
-        special_instructions: '',
-        payment_method: 'CARD',
+        special_instructions: ''
     });
     const [isLoadingLocation, setIsLoadingLocation] = useState(false);
     const [prefilledAddress, setPrefilledAddress] = useState(null);
 
-    // Separate the fetch addresses logic into a reusable function
     const fetchAddresses = async () => {
         try {
             const response = await fetch(`/api/addresses?userId=${userId}`);
@@ -26,7 +24,6 @@ export function BookingModal({ service, onClose, onSubmit, userId }) {
             const data = await response.json();
             setAddresses(data);
             
-            // If there's a primary address, select it
             const primaryAddress = data.find(addr => addr.is_primary);
             if (primaryAddress) {
                 setBookingData(prev => ({
@@ -42,26 +39,60 @@ export function BookingModal({ service, onClose, onSubmit, userId }) {
         }
     };
 
-    // Initial fetch
     useEffect(() => {
         fetchAddresses();
     }, [userId]);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!bookingData.address_id) {
+            toast.error('Please select a service address');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    service_type: service.type,
+                    scheduled_time: bookingData.scheduled_time,
+                    base_price: service.pricing.basePrice,
+                    special_instructions: bookingData.special_instructions,
+                    address_id: bookingData.address_id
+                }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Failed to create booking');
+            }
+
+            const result = await response.json();
+            toast.success('Booking created successfully! Our team will contact you soon.');
+            onClose();
+        } catch (error) {
+            console.error('Error creating booking:', error);
+            toast.error(error.message || 'Failed to create booking');
+        }
+    };
+
     const handleAddressSubmit = async (newAddress) => {
         try {
-            // Refresh the addresses list after adding new address
             await fetchAddresses();
+            setBookingData(prev => ({
+                ...prev,
+                address_id: newAddress.id
+            }));
             setShowAddressModal(false);
             toast.success('Address added successfully');
         } catch (error) {
             console.error('Error refreshing addresses:', error);
             toast.error('Address added but failed to refresh list');
         }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(bookingData);
     };
 
     const getCurrentLocation = () => {
@@ -132,7 +163,7 @@ export function BookingModal({ service, onClose, onSubmit, userId }) {
                     {/* Service Details */}
                     <div className="service-summary">
                         <p>Service: {service.title}</p>
-                        <p>Price: {service.price}</p>
+                        <p>Price: ₹{service.pricing.basePrice}</p>
                     </div>
 
                     {/* Address Selection */}
@@ -184,6 +215,7 @@ export function BookingModal({ service, onClose, onSubmit, userId }) {
                                 scheduled_time: e.target.value
                             })}
                             required
+                            min={new Date().toISOString().slice(0, 16)}
                         />
                     </div>
 
@@ -197,29 +229,13 @@ export function BookingModal({ service, onClose, onSubmit, userId }) {
                                 special_instructions: e.target.value
                             })}
                             rows={3}
+                            placeholder="Any specific requirements or instructions..."
                         />
-                    </div>
-
-                    {/* Payment Method */}
-                    <div className="form-group">
-                        <label>Payment Method</label>
-                        <select
-                            value={bookingData.payment_method}
-                            onChange={(e) => setBookingData({
-                                ...bookingData,
-                                payment_method: e.target.value
-                            })}
-                            required
-                        >
-                            <option value="CARD">Credit/Debit Card</option>
-                            <option value="UPI">UPI</option>
-                            <option value="NET_BANKING">Net Banking</option>
-                        </select>
                     </div>
 
                     <div className="modal-actions">
                         <button type="button" onClick={onClose}>Cancel</button>
-                        <button type="submit">Proceed to Payment</button>
+                        <button type="submit">Book Service</button>
                     </div>
                 </form>
             </div>

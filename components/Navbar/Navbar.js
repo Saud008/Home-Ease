@@ -1,15 +1,36 @@
 "use client"; // Add this line to make it a client component
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { auth, provider } from '@/app/firebase'; // Import Firebase auth and provider
 import { signInWithPopup, signOut } from "firebase/auth";
 import { useAuth } from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
 import './Navbar.css'; // Assuming you have some CSS for styling
 
 const Navbar = () => {
     const [loading, setLoading] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const { user } = useAuth();
+    const profileRef = useRef(null);
+
+    // Add click outside handler
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfile(false);
+            }
+        };
+
+        // Add event listener when profile is shown
+        if (showProfile) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        // Cleanup event listener
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showProfile]);
 
     const handleLogin = async () => {
         try {
@@ -17,12 +38,13 @@ const Navbar = () => {
             const result = await signInWithPopup(auth, provider);
             const userData = result.user;
 
-            // Gather device information
-            const deviceInfo = {
+            // Gather user and device information
+            const userInfo = {
                 uid: userData.uid,
                 displayName: userData.displayName,
                 email: userData.email,
                 phoneNumber: userData.phoneNumber,
+                photoURL: userData.photoURL,
                 userAgent: window.navigator.userAgent,
                 platform: window.navigator.platform,
                 language: window.navigator.language,
@@ -36,15 +58,34 @@ const Navbar = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(deviceInfo),
+                body: JSON.stringify(userInfo),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to update user data');
             }
 
+            toast.success('Successfully logged in!', {
+                duration: 3000,
+                position: 'top-center',
+                style: {
+                    background: 'var(--background)',
+                    color: 'var(--foreground)',
+                    border: '1px solid var(--success)',
+                }
+            });
+
         } catch (error) {
             console.error("Error signing in: ", error);
+            toast.error('Failed to login', {
+                duration: 3000,
+                position: 'top-center',
+                style: {
+                    background: 'var(--background)',
+                    color: 'var(--foreground)',
+                    border: '1px solid var(--error)',
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -54,8 +95,26 @@ const Navbar = () => {
         try {
             setLoading(true);
             await signOut(auth);
+            toast.success('Successfully logged out!', {
+                duration: 3000,
+                position: 'top-center',
+                style: {
+                    background: 'var(--background)',
+                    color: 'var(--foreground)',
+                    border: '1px solid var(--success)',
+                }
+            });
         } catch (error) {
             console.error("Error signing out: ", error);
+            toast.error('Failed to logout', {
+                duration: 3000,
+                position: 'top-center',
+                style: {
+                    background: 'var(--background)',
+                    color: 'var(--foreground)',
+                    border: '1px solid var(--error)',
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -86,7 +145,7 @@ const Navbar = () => {
                     <span>Loading...</span>
                 ) : user ? (
                     <>
-                        <div className="user-profile">
+                        <div className="user-profile" ref={profileRef}>
                             <div 
                                 className="profile-circle" 
                                 onClick={toggleProfile}

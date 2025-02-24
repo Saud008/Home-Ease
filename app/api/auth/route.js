@@ -1,68 +1,120 @@
 import { NextResponse } from 'next/server';
-import pool from '@/app/lib/db';
+import { Pool } from 'pg';
+
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
 
 export async function POST(request) {
-    const client = await pool.connect();
-    
     try {
         const userData = await request.json();
-        await client.query('BEGIN');
+        const client = await pool.connect();
 
-        // Check if user exists
-        const userResult = await client.query(
-            'SELECT id FROM users WHERE firebase_uid = $1',
-            [userData.uid]
-        );
+        try {
+            await client.query('BEGIN');
 
-        let userId;
+            // Check if user exists
+            const userResult = await client.query(
+                'SELECT id FROM users WHERE firebase_uid = $1',
+                [userData.uid]
+            );
 
-        if (userResult.rows.length === 0) {
-            // Create new user
-            const newUser = await client.query(
-                `INSERT INTO users (
-                    firebase_uid, 
-                    name, 
-                    email, 
+            let userId;
+
+            if (userResult.rows.length === 0) {
+                // Insert new user
+                const insertResult = await client.query(
+                    `INSERT INTO users (
+                        id,
+                        firebase_uid,
+                        name,
+                        email,
+                        profile_image_url,
+                        created_at,
+                        updated_at,
+                        last_login,
+                        is_active
+                    ) VALUES (
+                        uuid_generate_v4(),
+                        $1,
+                        $2,
+                        $3,
+                        $4,
+                        CURRENT_TIMESTAMP,
+                        CURRENT_TIMESTAMP,
+                        CURRENT_TIMESTAMP,
+                        true
+                    ) RETURNING id`,
+                    [
+                        userData.uid,
+                        userData.displayName,
+                        userData.email,
+                        userData.photoURL || null
+                    ]
+                );
+                userId = insertResult.rows[0].id;
+            } else {
+                // Update existing user
+                userId = userResult.rows[0].id;
+                await client.query(
+                    `UPDATE users 
+                    SET 
+                        name = $1,
+                        email = $2,
+                        profile_image_url = $3,
+                        last_login = CURRENT_TIMESTAMP,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = $4`,
+                    [
+                        userData.displayName,
+                        userData.email,
+                        userData.photoURL || null,
+                        userId
+                    ]
+                );
+            }
+
+            // Insert or update user session
+            await client.query(
+                `INSERT INTO user_sessions (
+                    id,
+                    user_id,
+                    device_info,
+                    last_active,
                     created_at
-                ) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) 
-                RETURNING id`,
+                ) VALUES (
+                    uuid_generate_v4(),
+                    $1,
+                    $2,
+                    CURRENT_TIMESTAMP,
+                    CURRENT_TIMESTAMP
+                )`,
                 [
-                    userData.uid,
-                    userData.displayName,
-                    userData.email
+                    userId,
+                    userData
                 ]
             );
-            userId = newUser.rows[0].id;
-        } else {
-            // Update existing user
-            userId = userResult.rows[0].id;
-            await client.query(
-                `UPDATE users 
-                SET name = $1, 
-                    email = $2, 
-                    updated_at = CURRENT_TIMESTAMP,
-                    last_login = CURRENT_TIMESTAMP
-                WHERE id = $3`,
-                [userData.displayName, userData.email, userId]
-            );
+
+            await client.query('COMMIT');
+
+            return NextResponse.json({ 
+                message: 'User data updated successfully',
+                userId 
+            });
+
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
         }
 
-        await client.query('COMMIT');
-        
-        return NextResponse.json({ 
-            success: true, 
-            userId 
-        });
-
     } catch (error) {
-        await client.query('ROLLBACK');
-        console.error('Auth API Error:', error);
+        console.error('Error updating user data:', error);
         return NextResponse.json(
-            { success: false, error: 'Internal Server Error' },
+            { error: 'Failed to update user data' },
             { status: 500 }
         );
-    } finally {
-        client.release();
     }
 }
 

@@ -5,22 +5,17 @@ import { NextResponse } from 'next/server';
 export async function GET() {
     try {
         await connectDB();
-        
-        const services = await Service.find({ isActive: true }).lean();
-        
-        // Transform the data to match the component's expectations
-        const transformedServices = services.map(service => ({
-            ...service,
-            category: {
-                name: service.category,
-                icon: '🏠' // Default icon
-            },
-            type: {
-                name: service.type
-            }
-        }));
+        console.log("Connected to the database");
 
-        return NextResponse.json(transformedServices);
+        // Fetch active services and select the necessary fields
+        const services = await Service.find({ isActive: true })
+            .select('title description slug type category') // Select only the required fields
+            .lean();
+
+        console.log("Fetched services:", services); // Log the fetched services
+
+        // Ensure the services are returned as an array
+        return NextResponse.json(services);
     } catch (error) {
         console.error('Error details:', error);
         return NextResponse.json(

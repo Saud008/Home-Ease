@@ -5,35 +5,33 @@ import { useAuth } from '@/hooks/useAuth';
 import { BookingModal } from '@/components/BookingModal/BookingModal';
 import toast from 'react-hot-toast';
 import './Services.css';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-const ServiceCard = ({ service, onBookNow }) => {
+const ServiceCard = ({ service }) => {
     if (!service) return null;
-    
+
     return (
         <div className="service-card glass-effect">
             <div className="service-content">
                 <h3 className="text-gradient">{service.title}</h3>
-                <p>{service.shortDescription || service.description}</p>
-                {service.features && service.features.length > 0 && (
-                    <ul className="features-list">
-                        {service.features.map((feature, index) => (
+                <p>{service.description}</p>
+                {/* Display sub-services if available */}
+                {service.subServices && service.subServices.length > 0 && (
+                    <ul className="sub-services-list">
+                        {service.subServices.map((subService, index) => (
                             <li key={index}>
-                                {feature.icon && <span className="feature-icon">{feature.icon}</span>}
-                                <span>{feature.title}</span>
+                                <span>{subService.title}</span>
                             </li>
                         ))}
                     </ul>
                 )}
-                {service.pricing && (
-                    <p className="price">{service.pricing.displayText}</p>
-                )}
             </div>
-            <button 
-                className="book-now"
-                onClick={() => onBookNow(service)}
-            >
-                Book Now
-            </button>
+            <Link href={`/services/${service._id}`} passHref>
+                <button className="book-now">
+                    Book Now
+                </button>
+            </Link>
         </div>
     );
 };
@@ -67,7 +65,7 @@ export function Services({ isVisible }) {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await fetch('/api/services');
+                const response = await fetch('/api/services'); // Ensure this endpoint returns services
                 if (!response.ok) {
                     throw new Error('Failed to fetch services');
                 }
@@ -122,7 +120,6 @@ export function Services({ isVisible }) {
                     <ServiceCard
                         key={service._id}
                         service={service}
-                        onBookNow={setSelectedService}
                     />
                 ))}
             </div>

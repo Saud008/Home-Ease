@@ -1,0 +1,41 @@
+.container {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.subServiceTitle {
+    font-size: 2em; /* Larger font size for the heading */
+    color: #333; /* Dark text color */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.subServiceList {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+}
+
+.subServiceItem {
+    margin: 10px 0; /* Space between items */
+    padding: 15px; /* Padding inside each item */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #fff; /* White background for items */
+    transition: box-shadow 0.3s; /* Smooth transition for hover effect */
+}
+
+.subServiceItem:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+
+.subServiceDescription {
+    font-size: 1em; /* Standard font size for descriptions */
+    color: #666; /* Gray text color */
+}
+
+.subServicePrice {
+    font-weight: bold; /* Bold text for price */
+    color: #0070f3; /* Next.js blue color */
+    margin-top: 5px; /* Space above the price */
+}

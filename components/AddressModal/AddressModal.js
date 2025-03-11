@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './AddressModal.css';
-import { toast } from 'react-hot-toast';
+import { showToast } from '@/utils/toast';
 
 export function AddressModal({ onClose, onSubmit, userId }) {
     const [addressData, setAddressData] = useState({
@@ -35,9 +35,10 @@ export function AddressModal({ onClose, onSubmit, userId }) {
             const newAddress = await response.json();
             onSubmit(newAddress);
             onClose();
+            showToast.success('Address added successfully');
         } catch (error) {
             console.error('Error adding address:', error);
-            toast.error('Failed to add address');
+            showToast.error('Failed to add address');
         }
     };
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AddressModal } from '../AddressModal/AddressModal';
-import toast from 'react-hot-toast';
+import { showToast } from '@/utils/toast';
 import './BookingModal.css';
 
 export function BookingModal({ service, onClose, userId }) {
@@ -33,7 +33,7 @@ export function BookingModal({ service, onClose, userId }) {
             }
         } catch (error) {
             console.error('Error fetching addresses:', error);
-            toast.error('Failed to load addresses');
+            showToast.error('Failed to load addresses');
         } finally {
             setLoading(false);
         }
@@ -46,7 +46,7 @@ export function BookingModal({ service, onClose, userId }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!bookingData.address_id) {
-            toast.error('Please select a service address');
+            showToast.warning('Please select a service address');
             return;
         }
 
@@ -72,11 +72,11 @@ export function BookingModal({ service, onClose, userId }) {
             }
 
             const result = await response.json();
-            toast.success('Booking created successfully! Our team will contact you soon.');
+            showToast.success('Booking created successfully! Our team will contact you soon.');
             onClose();
         } catch (error) {
             console.error('Error creating booking:', error);
-            toast.error(error.message || 'Failed to create booking');
+            showToast.error(error.message || 'Failed to create booking');
         }
     };
 
@@ -88,16 +88,16 @@ export function BookingModal({ service, onClose, userId }) {
                 address_id: newAddress.id
             }));
             setShowAddressModal(false);
-            toast.success('Address added successfully');
+            showToast.success('Address added successfully');
         } catch (error) {
             console.error('Error refreshing addresses:', error);
-            toast.error('Address added but failed to refresh list');
+            showToast.error('Address added but failed to refresh list');
         }
     };
 
     const getCurrentLocation = () => {
         if (!navigator.geolocation) {
-            toast.error('Geolocation is not supported by your browser');
+            showToast.error('Geolocation is not supported by your browser');
             return;
         }
 
@@ -133,7 +133,7 @@ export function BookingModal({ service, onClose, userId }) {
                     }
                 } catch (error) {
                     console.error('Error getting location:', error);
-                    toast.error('Failed to get address from location');
+                    showToast.error('Failed to get address from location');
                 } finally {
                     setIsLoadingLocation(false);
                 }
@@ -141,7 +141,7 @@ export function BookingModal({ service, onClose, userId }) {
             (error) => {
                 setIsLoadingLocation(false);
                 console.error('Geolocation error:', error);
-                toast.error('Failed to get your location');
+                showToast.error('Failed to get your location');
             },
             {
                 enableHighAccuracy: true,

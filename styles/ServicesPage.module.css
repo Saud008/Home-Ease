@@ -1,0 +1,196 @@
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0.7);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.pageHeader:hover .title::after {
+  transform: scaleX(1);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--foreground-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.servicesWrapper {
+  margin-bottom: 60px;
+}
+
+.guaranteeSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin: 60px 0;
+  padding: 40px 0;
+  border-top: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.1);
+  border-bottom: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.1);
+}
+
+.guaranteeCard {
+  background: var(--background);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.05);
+  text-align: center;
+}
+
+.guaranteeCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--primary-rgb, 0, 112, 243), 0.1);
+  border-radius: 50%;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.guaranteeCard:hover .iconWrapper {
+  background: var(--primary);
+  color: white;
+  transform: scale(1.1);
+}
+
+.guaranteeCard h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.guaranteeCard p {
+  color: var(--foreground-secondary);
+  line-height: 1.6;
+}
+
+.faqSection {
+  margin: 60px 0;
+}
+
+.faqSection h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 40px;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.faqSection h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0.7);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.faqSection:hover h2::after {
+  transform: scaleX(1);
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+}
+
+.faqItem {
+  background: var(--background);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.05);
+}
+
+.faqItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.faqItem h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: var(--foreground);
+  position: relative;
+  display: inline-block;
+}
+
+.faqItem h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.faqItem:hover h3::after {
+  width: 100%;
+}
+
+.faqItem p {
+  color: var(--foreground-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+} 

@@ -1,41 +1,775 @@
 .container {
-    padding: 20px;
-    background-color: #f9f9f9; /* Light background color */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .subServiceTitle {
-    font-size: 2em; /* Larger font size for the heading */
-    color: #333; /* Dark text color */
-    margin-bottom: 20px; /* Space below the heading */
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.subServiceList {
-    list-style-type: none; /* Remove default list styling */
-    padding: 0; /* Remove default padding */
+/* Title underline animation */
+.subServiceTitle::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    transform: scaleX(0.6);
+    transform-origin: left;
+    transition: transform 0.5s ease;
 }
 
-.subServiceItem {
-    margin: 10px 0; /* Space between items */
-    padding: 15px; /* Padding inside each item */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #fff; /* White background for items */
-    transition: box-shadow 0.3s; /* Smooth transition for hover effect */
+.container:hover .subServiceTitle::after {
+    transform: scaleX(1);
 }
 
-.subServiceItem:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+/* Grid Layout */
+.subServiceGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
 }
 
-.subServiceDescription {
-    font-size: 1em; /* Standard font size for descriptions */
-    color: #666; /* Gray text color */
+/* Card Styles with dynamic effects */
+.subServiceCard {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--background);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.05);
 }
 
-.subServicePrice {
-    font-weight: bold; /* Bold text for price */
-    color: #0070f3; /* Next.js blue color */
-    margin-top: 5px; /* Space above the price */
+/* Card hover effects */
+.subServiceCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Line from bottom effect */
+.subServiceCard::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.subServiceCard:hover::after {
+    transform: scaleX(1);
+}
+
+.cardImage {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cardImage img {
+    transition: transform 0.5s ease !important;
+    object-fit: cover;
+}
+
+.subServiceCard:hover .cardImage img {
+    transform: scale(1.08);
+}
+
+/* Image overlay gradient */
+.cardImage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.subServiceCard:hover .cardImage::after {
+    opacity: 1;
+}
+
+.cardContent {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardTitle {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: var(--foreground);
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+/* Title underline animation */
+.cardTitle::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.subServiceCard:hover .cardTitle {
+    color: var(--primary);
+}
+
+.subServiceCard:hover .cardTitle::after {
+    transform: scaleX(1);
+}
+
+.cardDescription {
+    color: var(--foreground-secondary);
+    margin-bottom: 16px;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.cardDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.1);
+}
+
+.cardPrice {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.cardDuration {
+    color: var(--foreground-secondary);
+    font-size: 0.9rem;
+}
+
+/* Button Styles */
+.addToCartButton {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shine animation */
+.addToCartButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.subServiceCard:hover .addToCartButton::before {
+    left: 100%;
+}
+
+/* Button hover line effect */
+.addToCartButton::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.addToCartButton:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb, 0, 112, 243), 0.3);
+}
+
+.addToCartButton:hover::after {
+    transform: scaleX(1);
+}
+
+/* Loading state */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 20px;
+}
+
+.loadingSpinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(var(--primary-rgb, 0, 112, 243), 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s linear infinite;
+    position: relative;
+}
+
+.loadingSpinner::before, 
+.loadingSpinner::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 3px solid transparent;
+    border-radius: 50%;
+}
+
+.loadingSpinner::before {
+    border-top-color: var(--primary-dark);
+    animation: spin 2s linear infinite;
+}
+
+.loadingSpinner::after {
+    border-top-color: rgba(var(--primary-rgb, 0, 112, 243), 0.5);
+    animation: spin 1.5s linear infinite reverse;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loadingContainer p {
+    color: var(--foreground-secondary);
+    font-size: 1.1rem;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Error container */
+.errorContainer {
+    text-align: center;
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 600px;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.errorContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ef4444, transparent);
+}
+
+.errorContainer p {
+    color: #ef4444;
+    margin-bottom: 20px;
+}
+
+.retryButton {
+    padding: 10px 20px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.retryButton:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Modal and Form Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+    background-color: var(--background);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--background-secondary);
+    position: sticky;
+    top: 0;
+    background-color: var(--background);
+    z-index: 1;
+    border-radius: 12px 12px 0 0;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--foreground);
+    font-weight: 600;
+    background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+}
+
+.modalHeader h3::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+}
+
+.modalContent:hover .modalHeader h3::after {
+    transform: scaleX(1);
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--foreground);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.closeButton:hover {
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+.closeButton::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent);
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+}
+
+.closeButton:hover::before {
+    transform: scale(1);
+}
+
+.modalContent form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: formItemFade 0.5s ease forwards;
+    opacity: 0;
+    position: relative;
+}
+
+@keyframes formItemFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.formGroup:nth-child(1) { animation-delay: 0.1s; }
+.formGroup:nth-child(2) { animation-delay: 0.2s; }
+.formGroup:nth-child(3) { animation-delay: 0.3s; }
+.formGroup:nth-child(4) { animation-delay: 0.4s; }
+.formGroup:nth-child(5) { animation-delay: 0.5s; }
+
+.formGroup label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--foreground-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    transform-origin: left;
+}
+
+.formGroup:focus-within label {
+    color: var(--primary);
+    transform: scale(1.02);
+}
+
+/* Line from bottom effect for inputs */
+.formGroup input, 
+.formGroup textarea {
+    padding: 12px 16px;
+    border: 1px solid var(--background-secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    color: var(--foreground);
+    position: relative;
+}
+
+.inputWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.inputWrapper::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: 1;
+    border-radius: 0 0 4px 4px;
+}
+
+.inputWrapper:focus-within::after {
+    transform: scaleX(1);
+}
+
+.formGroup input:focus, 
+.formGroup textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 0, 112, 243), 0.2);
+    outline: none;
+}
+
+.formGroup input:hover, 
+.formGroup textarea:hover {
+    border-color: var(--foreground-secondary);
+}
+
+.formGroup textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Floating label animation */
+.floatingLabel {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    color: var(--foreground-secondary);
+    pointer-events: none;
+    background: var(--background);
+    padding: 0 4px;
+}
+
+.inputWrapper input:focus + .floatingLabel,
+.inputWrapper input:not(:placeholder-shown) + .floatingLabel,
+.inputWrapper textarea:focus + .floatingLabel,
+.inputWrapper textarea:not(:placeholder-shown) + .floatingLabel {
+    transform: translateY(-24px) scale(0.85);
+    color: var(--primary);
+}
+
+/* Date and time input styling */
+.dateInput, 
+.timeInput {
+    position: relative;
+    width: 100%;
+}
+
+.dateInput input,
+.timeInput input {
+    padding-right: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.dateInput::after {
+    content: "📅";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 16px;
+}
+
+.timeInput::after {
+    content: "🕒";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 16px;
+}
+
+.modalActions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 16px;
+    animation: formItemFade 0.5s 0.6s ease forwards;
+    opacity: 0;
+}
+
+/* Original buttons with enhanced styles */
+.submitButton, 
+.cancelButton {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.submitButton {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Button hover line effect */
+.submitButton::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.submitButton:hover::before {
+    transform: scaleX(1);
+}
+
+.submitButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.submitButton:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb, 0, 112, 243), 0.3);
+}
+
+.submitButton:active::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+.cancelButton {
+    background-color: transparent;
+    color: var(--foreground);
+    border: 1px solid var(--background-secondary);
+    position: relative;
+    overflow: hidden;
+}
+
+.cancelButton::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--foreground-secondary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.cancelButton:hover::before {
+    transform: scaleX(1);
+}
+
+.cancelButton:hover {
+    background-color: var(--background-secondary);
+    transform: translateY(-2px);
+}
+
+/* Phone validation */
+.phoneValid .inputWrapper::after {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.phoneInvalid .inputWrapper::after {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.validationMessage {
+    font-size: 0.8rem;
+    margin-top: 4px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+.validationMessage.error {
+    color: #ef4444;
+}
+
+.validationMessage.success {
+    color: #10b981;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .subServiceGrid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .subServiceTitle {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .subServiceGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cardImage {
+        height: 180px;
+    }
+    
+    .modalActions {
+        flex-direction: column;
+    }
+    
+    .submitButton, 
+    .cancelButton {
+        width: 100%;
+    }
 }

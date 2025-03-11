@@ -1,0 +1,201 @@
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0.7);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.container:hover .title::after {
+  transform: scaleX(1);
+}
+
+.section {
+  margin-bottom: 60px;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  position: relative;
+  display: inline-block;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transition: width 0.3s ease, transform 0.3s ease;
+  transform: scaleX(1);
+}
+
+.section:hover h2::after {
+  width: 100%;
+}
+
+.section p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  margin-bottom: 20px;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.valueCard {
+  background-color: var(--background);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(var(--foreground-rgb, 0, 0, 0), 0.05);
+}
+
+.valueCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.valueCard:hover::after {
+  transform: scaleX(1);
+}
+
+.valueCard h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: var(--primary);
+}
+
+.valueCard p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.teamSection {
+  margin-top: 80px;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.teamMember {
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.teamMember:hover {
+  transform: translateY(-10px);
+}
+
+.memberPhoto {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 20px;
+  border: 3px solid var(--background);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.memberPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.teamMember:hover .memberPhoto {
+  box-shadow: 0 8px 25px rgba(var(--primary-rgb, 0, 112, 243), 0.2);
+  border-color: var(--primary);
+}
+
+.teamMember:hover .memberPhoto img {
+  transform: scale(1.1);
+}
+
+.teamMember h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.teamMember p {
+  color: var(--foreground-secondary);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .valuesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .teamGrid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .valuesGrid, .teamGrid {
+    grid-template-columns: 1fr;
+  }
+} 

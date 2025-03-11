@@ -1,51 +1,52 @@
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
-
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
+import connectDB from '@/lib/mongodb';
+import Booking from '@/models/Bookings';
 
 export async function POST(request) {
     try {
-        const booking = await request.json();
+        await connectDB();
+        const bookingData = await request.json();
+
+        const newBooking = await Booking.create(bookingData);
         
-        const client = await pool.connect();
-        try {
-            // Create booking with pending status
-            const result = await client.query(
-                `INSERT INTO bookings (
-                    user_id,
-                    service_type,
-                    status,
-                    scheduled_time,
-                    base_price,
-                    total_cost,
-                    payment_status
-                ) VALUES (
-                    $1, $2, 'pending', $3, $4, NULL, 'pending'
-                ) RETURNING booking_id`,
-                [
-                    booking.user_id,
-                    booking.service_type,
-                    booking.scheduled_time,
-                    booking.base_price
-                ]
-            );
-
-            return NextResponse.json({
-                message: 'Booking created successfully',
-                bookingId: result.rows[0].booking_id
-            });
-
-        } finally {
-            client.release();
-        }
+        return NextResponse.json({
+            message: "Booking created successfully",
+            booking: newBooking
+        }, { status: 201 });
 
     } catch (error) {
-        console.error('Error creating booking:', error);
-        return NextResponse.json(
-            { error: 'Failed to create booking' },
-            { status: 500 }
-        );
+        console.error('Booking creation error:', error);
+        return NextResponse.json({
+            message: "Error creating booking",
+            error: error.message
+        }, { status: 500 });
     }
-} 
+}
+
+export async function GET(request) {
+    try {
+        await connectDB();
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json({
+                message: "User ID is required"
+            }, { status: 400 });
+        }
+
+        const bookings = await Booking.find({ userId })
+            .populate('serviceId')
+            .populate('subServiceId')
+            .sort({ createdAt: -1 });
+
+        return NextResponse.json(bookings);
+
+    } catch (error) {
+        console.error('Booking fetch error:', error);
+        return NextResponse.json({
+            message: "Error fetching bookings",
+            error: error.message
+        }, { status: 500 });
+    }
+}

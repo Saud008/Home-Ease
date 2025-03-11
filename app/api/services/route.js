@@ -12,8 +12,6 @@ export async function GET() {
             .select('title description slug type category') // Select only the required fields
             .lean();
 
-        console.log("Fetched services:", services); // Log the fetched services
-
         // Ensure the services are returned as an array
         return NextResponse.json(services);
     } catch (error) {

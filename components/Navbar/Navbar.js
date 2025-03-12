@@ -163,7 +163,7 @@ const Navbar = () => {
                                 
                                 <div className="profile-content">
                                     <Link 
-                                        href="/profile" 
+                                        href="/pages/profile" 
                                         className="profile-link"
                                         onClick={() => setShowProfile(false)}
                                     >

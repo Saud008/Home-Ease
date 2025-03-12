@@ -66,21 +66,21 @@ const AboutPage = () => {
               <div className={styles.memberPhoto}>
                 <img src="/team/ceo.jpg" alt="CEO" />
               </div>
-              <h3>Jane Doe</h3>
+              <h3>Nikhil Tiwari</h3>
               <p>CEO & Founder</p>
             </div>
             <div className={styles.teamMember}>
               <div className={styles.memberPhoto}>
                 <img src="/team/cto.jpg" alt="CTO" />
               </div>
-              <h3>John Smith</h3>
+              <h3>Saud Alam</h3>
               <p>CTO</p>
             </div>
             <div className={styles.teamMember}>
               <div className={styles.memberPhoto}>
                 <img src="/team/operations.jpg" alt="Operations Director" />
               </div>
-              <h3>Emily Johnson</h3>
+              <h3>Aniruddh Jain</h3>
               <p>Operations Director</p>
             </div>
           </div>

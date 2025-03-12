@@ -4,6 +4,7 @@ import React from 'react';
 import { Layout } from '@/components/Layout';
 import { Hero } from '@/components/Hero/Hero';
 import { Services } from '@/components/Services/Services';
+import Chatbot from './chatbot/page';
 
 export default function Home() {
 
@@ -16,6 +17,7 @@ export default function Home() {
         <Layout>
             <Hero onExploreClick={handleExploreClick} />
             <Services />
+            <Chatbot />
         </Layout>
     );
 }

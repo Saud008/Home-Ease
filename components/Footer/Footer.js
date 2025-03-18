@@ -130,7 +130,7 @@ const Footer = () => {
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                             </span>
-                            <span>nikhiltiwari7424@gmail.com</span>
+                            <span>saudmasaud786@gmail.com</span>
                         </li>
                     </ul>
                 </div>
